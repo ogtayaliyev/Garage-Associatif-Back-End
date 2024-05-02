@@ -24,7 +24,7 @@ public class Reparation {
     private ReparationType reparationType;
 
     private LocalDateTime startDate;
-    private LocalDateTime endDate; // Yeni eklendi
+    private LocalDateTime endDate;
 
     @ManyToOne
     @JoinColumn(name = "voiture_id")

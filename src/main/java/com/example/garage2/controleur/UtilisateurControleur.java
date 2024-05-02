@@ -1,6 +1,7 @@
 package com.example.garage2.controleur;
 
 import com.example.garage2.entite.Utilisateur;
+import com.example.garage2.entite.Voitures;
 import com.example.garage2.repository.UtilisateurRepository;
 import com.example.garage2.securite.JwtService;
 import com.example.garage2.service.UtilisateurService;
@@ -35,11 +36,15 @@ public class UtilisateurControleur {
     public ResponseEntity<?> profil() {
         Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (utilisateur != null) {
+
             return ResponseEntity.ok(utilisateur);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
+
+
 
     @PutMapping(path = "modifier")
     public ResponseEntity<Utilisateur> modifierInformationsUtilisateur(@RequestBody Utilisateur utilisateurModifie, @Autowired JwtService jwtService) {
@@ -56,6 +61,19 @@ public class UtilisateurControleur {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("addUtilisateureVoiture")
+    public ResponseEntity<String> ajouterVoiture(@RequestBody Voitures voitures) {
+        try {
+            Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            utilisateurService.ajouterVoiture(utilisateur.getId(), voitures);
+            return ResponseEntity.ok("Voiture ajoutée avec succès.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
 
 }
 
