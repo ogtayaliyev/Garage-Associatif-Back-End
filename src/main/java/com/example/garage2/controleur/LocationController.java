@@ -21,7 +21,7 @@ public class LocationController {
     @Autowired
     private EmailService emailService;
 
-    @PostMapping("/locationbox")
+    @PostMapping("locationbox")
     public ResponseEntity<String> creerLocationbox(@RequestBody LocationBox locationBox) {
         try {
             // Extraire l'utilisateur actuellement authentifié

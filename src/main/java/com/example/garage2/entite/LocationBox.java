@@ -1,5 +1,6 @@
 package com.example.garage2.entite;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,9 +30,12 @@ public class LocationBox {
     @JoinColumn(name = "box_id", nullable = false)
     private Box box;
 
+    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "utilisateur_id", nullable = false)
+    @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;
+
+
     public Long getBoxId() {
         if (box != null) {
             return box.getId();

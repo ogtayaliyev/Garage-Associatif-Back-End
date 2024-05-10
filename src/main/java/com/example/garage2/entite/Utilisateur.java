@@ -12,10 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -28,17 +25,12 @@ public class Utilisateur implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "nom")
+
     private String nom;
-    @Column(name = "prenom")
     private String prenom;
-    @Column(name = "password")
     private String password;
-    @Column(name = "email")
     private String email;
-    @Column(name = "phone_number")
     private String phone_number;
-    @Column(name = "adresse")
     private String adresse;
 
     @CreationTimestamp
@@ -54,13 +46,11 @@ public class Utilisateur implements UserDetails {
         return this.email;
     }
 
-    @ManyToMany
-    @JoinTable(
-            name = "utilisateur_voitures",
-            joinColumns = @JoinColumn(name = "utilisateur_id"),
-            inverseJoinColumns = @JoinColumn(name = "voiture_id")
-    )
-    private List<Voitures> voitures = new ArrayList<>();
+    @OneToMany(mappedBy="utilisateur",fetch = FetchType.EAGER)
+    private List<Voitures> voitures;
+
+    @OneToMany(mappedBy="utilisateur",fetch = FetchType.EAGER)
+    private List<LocationBox> locationBoxes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

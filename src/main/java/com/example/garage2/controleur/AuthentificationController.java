@@ -4,6 +4,7 @@ import com.example.garage2.dto.AuthentificationDTO;
 import com.example.garage2.entite.Utilisateur;
 import com.example.garage2.securite.JwtService;
 import com.example.garage2.service.UtilisateurService;
+import com.example.garage2.service.ValidationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,11 +25,13 @@ public class AuthentificationController {
     private final AuthenticationManager authenticationManager;
     private final UtilisateurService utilisateurService;
     private final JwtService jwtService;
+    private final ValidationService validationService;
 
-    public AuthentificationController(AuthenticationManager authenticationManager, UtilisateurService utilisateurService, JwtService jwtService) {
+    public AuthentificationController(AuthenticationManager authenticationManager, UtilisateurService utilisateurService, JwtService jwtService, ValidationService validationService) {
         this.authenticationManager = authenticationManager;
         this.utilisateurService = utilisateurService;
         this.jwtService = jwtService;
+        this.validationService = validationService;
     }
 
     @PostMapping(path = "inscription",consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -43,8 +46,17 @@ public class AuthentificationController {
         this.utilisateurService.activation(activation);
     }
 
+    @PostMapping(path = "modifier-mdp")
+    public void modifierMdp(@RequestBody Map<String, String> activation){
+        this.utilisateurService.modifierMdp(activation);
+    }
 
-    @PostMapping(path = "connexion",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "nouveau-mdp")
+    public void nouveauMdp(@RequestBody Map<String, String> activation){
+        this.utilisateurService.nouveauMdp(activation);
+    }
+
+    @PostMapping(path = "connexion")
     public ResponseEntity connexion(@RequestBody AuthentificationDTO authentificationDTO) {
         final Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authentificationDTO.getEmail(), authentificationDTO.getPassword())

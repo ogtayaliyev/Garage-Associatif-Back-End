@@ -2,7 +2,9 @@ package com.example.garage2.securite;
 
 
 
+import com.example.garage2.entite.Jwt;
 import com.example.garage2.entite.Utilisateur;
+import com.example.garage2.repository.JwtRepository;
 import com.example.garage2.service.UtilisateurService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -21,12 +23,32 @@ import java.util.function.Function;
 @AllArgsConstructor
 @Service
 public class JwtService {
+    public static final String BEARER = "bearer";
     private final String ENCRIPTION_KEY = "608f36e92dc66d97d5933f0e6371493cb4fc05b1aa8f8de64014732472303a7c";
     private UtilisateurService utilisateurService;
+    private JwtRepository jwtRepository;
+
+    public Jwt tokenByValue(String value){
+       return this.jwtRepository.findByValeurAndDesactiveAndExpire(
+                value,
+                false,
+                false).orElseThrow(()->new RuntimeException("Token invalid ou inconnu"));
+    }
     
     public Map<String, String> generate(String username) {
         Utilisateur utilisateur = this.utilisateurService.loadUserByUsername(username);
-        return this.generateJwt(utilisateur);
+        Map<String, String> jwtMap = this.generateJwt(utilisateur);
+
+        final Jwt jwt = Jwt
+                .builder()
+                .valeur(jwtMap.get(BEARER))
+                .desactive(false)
+                .expire(false)
+                .utilisateur(utilisateur)
+                .build();
+        this.jwtRepository.save(jwt);
+
+        return jwtMap;
     }
 
     public String extractUsername(String token) {
@@ -72,7 +94,7 @@ public class JwtService {
                 .setClaims(claims)
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
-        return Map.of("bearer", bearer);
+        return Map.of(BEARER, bearer);
     }
 
     private Key getKey() {

@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,4 +21,13 @@ public class Voiture_Marque {
     private Long id;
     private String marque_nom;
     private String pays_fabriquant;
+
+
+
+
+
+//
+//    @OneToMany(mappedBy="marque", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+//    private List<Voiture_model> models = new ArrayList<>();
+
 }

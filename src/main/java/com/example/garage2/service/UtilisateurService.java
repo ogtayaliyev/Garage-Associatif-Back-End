@@ -10,6 +10,7 @@ import com.example.garage2.entite.Voitures;
 import com.example.garage2.repository.UtilisateurRepository;
 import com.example.garage2.repository.VoitureRepository;
 import com.example.garage2.securite.PasswordValidator;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @AllArgsConstructor
 @Service
@@ -100,27 +100,32 @@ public class UtilisateurService implements UserDetailsService {
             utilisateurExistant.setPhone_number(utilisateurModifie.getPhone_number());
         }
 
-        // Ajout de nouvelles voitures
-        if (utilisateurModifie.getVoitures() != null && !utilisateurModifie.getVoitures().isEmpty()) {
-            List<Voitures> nouvellesVoitures = utilisateurModifie.getVoitures().stream()
-                    .map(voiture -> {
-                        // Vérifiez si la voiture existe déjà dans la base de données
-                        Voitures voitureExistante = voitureRepository.findByPlaqueImmatriculation(voiture.getPlaqueImmatriculation());
-                        if (voitureExistante == null) {
-                            // Si la voiture n'existe pas, enregistrez-la dans la base de données
-                            return voitureRepository.save(voiture);
-                        } else {
-                            // Si la voiture existe déjà, retournez-la
-                            return voitureExistante;
-                        }
-                    })
-                    .collect(Collectors.toList());
-
-            // Associez les nouvelles voitures à l'utilisateur
-            utilisateurExistant.getVoitures().addAll(nouvellesVoitures);
-        }
         return utilisateurRepository.save(utilisateurExistant);
     }
 
+    public void ajouterVoiture(int idUtilisateur, Voitures voitures) {
+        Utilisateur utilisateur = utilisateurRepository.findById(idUtilisateur)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable avec l'ID : " + idUtilisateur));
+
+        // Associer la voiture à l'utilisateur
+        voitures.setUtilisateur(utilisateur);
+
+        // Sauvegarder la voiture dans la base de données
+        voitureRepository.save(voitures);
+    }
+
+    public void modifierMdp(Map<String, String> parametres) {
+        Utilisateur utilisateur = this.loadUserByUsername(parametres.get("email"));
+        this.validationService.enregistrer(utilisateur);
+    }
+
+    public void nouveauMdp(Map<String, String> parametres) {
+        Utilisateur utilisateur = this.loadUserByUsername(parametres.get("email"));
+       final Validation validation = validationService.lireEnFonctionDuCode(parametres.get("code"));
+       if(validation.getUtilisateur().getEmail().equals(utilisateur.getEmail())){
+        String mdpCrypte = this.passwordEncoder.encode(parametres.get("password"));
+        utilisateur.setPassword(mdpCrypte);}
+       this.utilisateurRepository.save(utilisateur);
+    }
 }
 
