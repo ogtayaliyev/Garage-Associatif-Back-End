@@ -103,17 +103,6 @@ public class UtilisateurService implements UserDetailsService {
         return utilisateurRepository.save(utilisateurExistant);
     }
 
-    public void ajouterVoiture(int idUtilisateur, Voitures voitures) {
-        Utilisateur utilisateur = utilisateurRepository.findById(idUtilisateur)
-                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable avec l'ID : " + idUtilisateur));
-
-        // Associer la voiture à l'utilisateur
-        voitures.setUtilisateur(utilisateur);
-
-        // Sauvegarder la voiture dans la base de données
-        voitureRepository.save(voitures);
-    }
-
     public void modifierMdp(Map<String, String> parametres) {
         Utilisateur utilisateur = this.loadUserByUsername(parametres.get("email"));
         this.validationService.enregistrer(utilisateur);

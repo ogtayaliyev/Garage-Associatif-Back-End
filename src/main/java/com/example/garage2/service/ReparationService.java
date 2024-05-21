@@ -16,9 +16,10 @@ import java.util.Optional;
 @Service
 public class ReparationService {
 
-    @Autowired
+//   @Autowired
     private final ReparationRepository reparationRepository;
-    @Autowired
+
+//    @Autowired
     private final UtilisateurRepository utilisateurRepository;
 
     public ReparationService(ReparationRepository reparationRepository, UtilisateurRepository utilisateurRepository) {
@@ -61,6 +62,37 @@ public class ReparationService {
 
         // Enregistrer la nouvelle réservation
         reparationRepository.save(reparation);
+    }
+
+    public void deleteReparation(Long id) {
+        reparationRepository.deleteById(id);
+    }
+
+    public Reparation updateReparation(Long userId, Long reparationId, Reparation reparationModifiee) {
+        // List des Voitures utilisateur connecté
+        List<Reparation> reparationlist = reparationRepository.findByUtilisateurId(userId);
+
+        // Trouver entretiens reparation d' utilisateure dans les reparations existent
+        Reparation reparationExistante = null;
+        for (Reparation reparation : reparationlist) {
+            if (reparation.getId().equals(reparationId)) {
+                reparationExistante = reparation;
+                break;
+            }
+        }
+
+        if (reparationExistante == null) {
+            return null; //
+        }
+
+        if (reparationModifiee.getEtatReparation() != null) {
+            reparationExistante.setEtatReparation(reparationModifiee.getEtatReparation());
+        }
+        return reparationRepository.save(reparationExistante);
+    }
+
+    public List<Reparation> getAllReparations() {
+        return reparationRepository.findAll();
     }
 }
 

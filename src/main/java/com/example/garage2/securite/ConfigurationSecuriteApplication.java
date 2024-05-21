@@ -44,7 +44,7 @@ public class ConfigurationSecuriteApplication{
                                                 .requestMatchers(POST,"/activation").permitAll()
                                                 .requestMatchers(GET,"/voitureOccasion").permitAll()
                                                 .requestMatchers(POST,"/send-email").permitAll()
-                                                .requestMatchers(POST,"/reparation").permitAll()
+                                                .requestMatchers(POST,"/voitures").permitAll()
                                                 .requestMatchers(POST,"/modifier-mdp").permitAll()
                                                 .requestMatchers(POST,"/nouveau-mdp").permitAll()
                                                 .anyRequest().authenticated()

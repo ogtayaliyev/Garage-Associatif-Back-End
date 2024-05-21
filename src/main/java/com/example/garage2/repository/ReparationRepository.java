@@ -1,5 +1,6 @@
 package com.example.garage2.repository;
 
+import com.example.garage2.entite.LocationBox;
 import com.example.garage2.entite.Reparation;
 import com.example.garage2.entite.ReparationType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,7 @@ public interface ReparationRepository extends JpaRepository<Reparation,Long> {
 
     @Query("SELECT rt FROM ReparationType rt WHERE rt.id = :reparationTypeId")
     ReparationType findReparationTypeById(@Param("reparationTypeId") Long reparationTypeId);
+
+    List<Reparation> findByUtilisateurId(Long userId);
+
 }

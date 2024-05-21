@@ -29,8 +29,9 @@ public class Voitures {
     private String boite;
     private String carroserie;
     private String carburant;
-    private int kilometrage;
+    private Integer kilometrage;
     private String plaqueImmatriculation;
+    private boolean etatVente;
 
 
 //    @ManyToOne
@@ -45,5 +46,7 @@ public class Voitures {
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;
+
+
 
 }

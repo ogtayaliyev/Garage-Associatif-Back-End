@@ -58,18 +58,5 @@ public class UtilisateurControleur {
         }
     }
 
-    @PostMapping("addUtilisateureVoiture")
-    public ResponseEntity<String> ajouterVoiture(@RequestBody Voitures voitures) {
-        try {
-            Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            utilisateurService.ajouterVoiture(utilisateur.getId(), voitures);
-            return ResponseEntity.ok("Voiture ajoutée avec succès.");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-
-
 }
 

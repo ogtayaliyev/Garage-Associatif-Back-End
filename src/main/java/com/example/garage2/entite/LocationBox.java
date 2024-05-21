@@ -25,7 +25,12 @@ public class LocationBox {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime returnDate;
     private float prix_loc;
+    private String etatLocation;
 
+
+    public float getPrixLoc() {
+        return prix_loc;
+    }
     @ManyToOne
     @JoinColumn(name = "box_id", nullable = false)
     private Box box;

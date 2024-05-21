@@ -52,6 +52,9 @@ public class Utilisateur implements UserDetails {
     @OneToMany(mappedBy="utilisateur",fetch = FetchType.EAGER)
     private List<LocationBox> locationBoxes;
 
+    @OneToMany(mappedBy="utilisateur",fetch = FetchType.EAGER)
+    private List<Reparation> reparations;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+this.role.getLibelle()));
