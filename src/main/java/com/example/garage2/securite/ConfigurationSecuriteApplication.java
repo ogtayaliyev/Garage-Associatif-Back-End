@@ -15,8 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -40,11 +39,12 @@ public class ConfigurationSecuriteApplication{
                                         authorize
                                                 .requestMatchers(POST,"/inscription").permitAll()
                                                 .requestMatchers(POST,"/connexion").permitAll()
-                                                .requestMatchers(POST,"/make").permitAll()
+                                                .requestMatchers(DELETE,"/make/{id}").hasRole("ADMINISTRATEUR")
                                                 .requestMatchers(POST,"/activation").permitAll()
                                                 .requestMatchers(GET,"/voitureOccasion").permitAll()
                                                 .requestMatchers(POST,"/send-email").permitAll()
                                                 .requestMatchers(POST,"/voitures").permitAll()
+//                                                .requestMatchers(GET,"/make").permitAll()
                                                 .requestMatchers(POST,"/modifier-mdp").permitAll()
                                                 .requestMatchers(POST,"/nouveau-mdp").permitAll()
                                                 .anyRequest().authenticated()

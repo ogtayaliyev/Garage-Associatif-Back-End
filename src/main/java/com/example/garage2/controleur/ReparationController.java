@@ -38,7 +38,7 @@ public class ReparationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Reparation>> getAllVoitures() {
+    public ResponseEntity<List<Reparation>> getAllReparations() {
         List<Reparation> reparation = reparationService.getAllReparations();
         return new ResponseEntity<>(reparation, HttpStatus.OK);
     }
@@ -86,10 +86,10 @@ public class ReparationController {
 
 
 
-    @DeleteMapping(path = "annulerReparation/{id}")
-    public ResponseEntity<Void> annulerReparation(@PathVariable Long id) {
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<String> annulerReparation(@PathVariable Long id) {
         reparationService.deleteReparation(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.ok("Suprimé avec succès.");
     }
 
 

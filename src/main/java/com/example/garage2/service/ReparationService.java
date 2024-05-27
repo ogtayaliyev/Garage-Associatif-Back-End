@@ -6,7 +6,9 @@ import com.example.garage2.entite.Utilisateur;
 import com.example.garage2.repository.ReparationRepository;
 import com.example.garage2.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -94,5 +96,20 @@ public class ReparationService {
     public List<Reparation> getAllReparations() {
         return reparationRepository.findAll();
     }
+
+    @Scheduled(fixedRate = 60000) // S'exécute toutes les minutes
+    public void updateReparationStatus() {
+        List<Reparation> reparations = reparationRepository.findByEndDateBeforeAndEtatReparationNot(LocalDateTime.now(), "passé");
+        for (Reparation entretien : reparations) {
+            entretien.setEtatReparation("passé");
+            reparationRepository.save(entretien);
+        }
+        List<Reparation> reparationsActives = reparationRepository.findByEndDateAfterAndEtatReparationNot(LocalDateTime.now(), "actif");
+        for (Reparation reparation : reparationsActives) {
+            reparation.setEtatReparation("actif");
+            reparationRepository.save(reparation);
+        }
+    }
+
 }
 

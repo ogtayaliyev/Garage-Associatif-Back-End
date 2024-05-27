@@ -7,6 +7,7 @@ import com.example.garage2.entite.Role;
 import com.example.garage2.entite.Utilisateur;
 import com.example.garage2.entite.Validation;
 import com.example.garage2.entite.Voitures;
+import com.example.garage2.exceptions.EmailAlreadyExistsException;
 import com.example.garage2.repository.UtilisateurRepository;
 import com.example.garage2.repository.VoitureRepository;
 import com.example.garage2.securite.PasswordValidator;
@@ -35,8 +36,10 @@ public class UtilisateurService implements UserDetailsService {
     private VoitureRepository voitureRepository;
 
     public void inscription(Utilisateur utilisateur) {
-
         PasswordValidator passwordValidator = new PasswordValidator();
+        String email = utilisateur.getEmail();
+
+
         if (!passwordValidator.isPasswordValid(utilisateur.getPassword())) {
             throw new RuntimeException("Le mot de passe ne répond pas aux critères de complexité.");
         }
@@ -51,6 +54,9 @@ public class UtilisateurService implements UserDetailsService {
         Optional<Utilisateur> utilisateurOptional = this.utilisateurRepository.findByEmail(utilisateur.getEmail());
         if(utilisateurOptional.isPresent()) {
             throw  new RuntimeException("Votre mail est déjà utilisé");
+        }
+        if (utilisateurRepository.existsByEmail(email)) {
+            throw new EmailAlreadyExistsException(email);
         }
         String mdpCrypte = this.passwordEncoder.encode(utilisateur.getPassword());
         utilisateur.setPassword(mdpCrypte);

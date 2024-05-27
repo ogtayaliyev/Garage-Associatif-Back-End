@@ -2,6 +2,7 @@ package com.example.garage2.service;
 import com.example.garage2.entite.*;
 import com.example.garage2.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -122,6 +123,19 @@ public class BoxService {
             locationExistante.setEtatLocation(locationModifiee.getEtatLocation());
         }
         return locationBoxRepository.save(locationExistante);
+    }
+    @Scheduled(fixedRate = 60000) // S'exécute toutes les minutes
+    public void updateLocationBoxStatus() {
+        List<LocationBox> boxs = locationBoxRepository.findByReturnDateBeforeAndEtatLocationNot(LocalDateTime.now(), "passé");
+        for (LocationBox box : boxs) {
+            box.setEtatLocation("passé");
+            locationBoxRepository.save(box);
+        }
+        List<LocationBox> boxsActives = locationBoxRepository.findByReturnDateAfterAndEtatLocationNot(LocalDateTime.now(), "actif");
+        for (LocationBox box : boxsActives) {
+            box.setEtatLocation("actif");
+            locationBoxRepository.save(box);
+        }
     }
 
 }
