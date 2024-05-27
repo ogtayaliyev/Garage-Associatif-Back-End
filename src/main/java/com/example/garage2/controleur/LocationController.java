@@ -24,12 +24,8 @@ public class LocationController {
     @Autowired
     private EmailService emailService;
 
-<<<<<<< HEAD
-    @PostMapping("locationbox")
-=======
 
     @PostMapping
->>>>>>> dev
     public ResponseEntity<String> creerLocationbox(@RequestBody LocationBox locationBox) {
 
         try {

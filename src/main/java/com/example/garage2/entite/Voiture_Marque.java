@@ -22,8 +22,6 @@ public class Voiture_Marque {
     private String marque_nom;
     private String pays_fabriquant;
 
-<<<<<<< HEAD
-=======
 
 
 
@@ -32,5 +30,4 @@ public class Voiture_Marque {
 //    @OneToMany(mappedBy="marque", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 //    private List<Voiture_model> models = new ArrayList<>();
 
->>>>>>> dev
 }

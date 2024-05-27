@@ -22,23 +22,6 @@ public class Voitures {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-<<<<<<< HEAD
-
-
-    private Date anne_fabrication;
-    private String couleur;
-    private String boite;
-    private String carroserie;
-    private String carburant;
-    private int kilometrage;
-    private String plaqueImmatriculation;
-
-
-    @ManyToOne
-    @JoinColumn(name = "marque_id")
-    private Voiture_Marque marque;
-
-=======
 
 
     private Date anne_fabrication;
@@ -55,7 +38,6 @@ public class Voitures {
 //    @JoinColumn(name = "marque_id")
 //    private Voiture_Marque marque;
 
->>>>>>> dev
     @ManyToOne
     @JoinColumn(name = "model_id")
     private Voiture_model model;
@@ -64,10 +46,7 @@ public class Voitures {
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;
-<<<<<<< HEAD
-=======
 
 
->>>>>>> dev
 
 }

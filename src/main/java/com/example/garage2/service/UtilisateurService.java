@@ -109,19 +109,6 @@ public class UtilisateurService implements UserDetailsService {
         return utilisateurRepository.save(utilisateurExistant);
     }
 
-<<<<<<< HEAD
-    public void ajouterVoiture(int idUtilisateur, Voitures voitures) {
-        Utilisateur utilisateur = utilisateurRepository.findById(idUtilisateur)
-                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable avec l'ID : " + idUtilisateur));
-
-        // Associer la voiture à l'utilisateur
-        voitures.setUtilisateur(utilisateur);
-
-        // Sauvegarder la voiture dans la base de données
-        voitureRepository.save(voitures);
-    }
-
-=======
     public void modifierMdp(Map<String, String> parametres) {
         Utilisateur utilisateur = this.loadUserByUsername(parametres.get("email"));
         this.validationService.enregistrer(utilisateur);
@@ -129,12 +116,10 @@ public class UtilisateurService implements UserDetailsService {
 
     public void nouveauMdp(Map<String, String> parametres) {
         Utilisateur utilisateur = this.loadUserByUsername(parametres.get("email"));
-       final Validation validation = validationService.lireEnFonctionDuCode(parametres.get("code"));
-       if(validation.getUtilisateur().getEmail().equals(utilisateur.getEmail())){
-        String mdpCrypte = this.passwordEncoder.encode(parametres.get("password"));
-        utilisateur.setPassword(mdpCrypte);}
-       this.utilisateurRepository.save(utilisateur);
+        final Validation validation = validationService.lireEnFonctionDuCode(parametres.get("code"));
+        if(validation.getUtilisateur().getEmail().equals(utilisateur.getEmail())){
+            String mdpCrypte = this.passwordEncoder.encode(parametres.get("password"));
+            utilisateur.setPassword(mdpCrypte);}
+        this.utilisateurRepository.save(utilisateur);
     }
->>>>>>> dev
 }
-

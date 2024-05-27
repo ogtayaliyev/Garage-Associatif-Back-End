@@ -1,6 +1,5 @@
 package com.example.garage2.entite;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,16 +23,6 @@ public class Utilisateur implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-<<<<<<< HEAD
-
-    private String nom;
-    private String prenom;
-    private String password;
-    private String email;
-    private String phone_number;
-    private String adresse;
-=======
->>>>>>> dev
 
     private String nom;
     private String prenom;
@@ -54,10 +43,6 @@ public class Utilisateur implements UserDetails {
         return this.email;
     }
 
-<<<<<<< HEAD
-    @OneToMany(mappedBy="utilisateur", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private List<Voitures> voitures;
-=======
     @OneToMany(mappedBy="utilisateur",fetch = FetchType.EAGER)
     private List<Voitures> voitures;
 
@@ -66,7 +51,6 @@ public class Utilisateur implements UserDetails {
 
     @OneToMany(mappedBy="utilisateur",fetch = FetchType.EAGER)
     private List<Reparation> reparations;
->>>>>>> dev
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
