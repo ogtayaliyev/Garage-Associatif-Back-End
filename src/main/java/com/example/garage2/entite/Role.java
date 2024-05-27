@@ -2,19 +2,10 @@ package com.example.garage2.entite;
 
 
 import com.example.garage2.TypeDeRole;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
-
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,5 +17,6 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Enumerated(EnumType.STRING)
+    @Column(length = 50)
     private TypeDeRole libelle;
 }

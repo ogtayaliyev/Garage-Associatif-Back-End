@@ -2,10 +2,7 @@ package com.example.garage2.entite;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.Instant;
 import java.util.*;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,6 +24,7 @@ public class Utilisateur implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+<<<<<<< HEAD
 
     private String nom;
     private String prenom;
@@ -33,13 +32,21 @@ public class Utilisateur implements UserDetails {
     private String email;
     private String phone_number;
     private String adresse;
+=======
+>>>>>>> dev
 
+    private String nom;
+    private String prenom;
+    private String password;
+    private String email;
+    private String phone_number;
+    private String adresse;
     @CreationTimestamp
     private Instant dateCreation;
     @UpdateTimestamp
     private Instant dateModification;
-
     private boolean actif = false;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Role role;
 
@@ -47,8 +54,19 @@ public class Utilisateur implements UserDetails {
         return this.email;
     }
 
+<<<<<<< HEAD
     @OneToMany(mappedBy="utilisateur", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Voitures> voitures;
+=======
+    @OneToMany(mappedBy="utilisateur",fetch = FetchType.EAGER)
+    private List<Voitures> voitures;
+
+    @OneToMany(mappedBy="utilisateur",fetch = FetchType.EAGER)
+    private List<LocationBox> locationBoxes;
+
+    @OneToMany(mappedBy="utilisateur",fetch = FetchType.EAGER)
+    private List<Reparation> reparations;
+>>>>>>> dev
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -7,6 +7,7 @@ import com.example.garage2.entite.Role;
 import com.example.garage2.entite.Utilisateur;
 import com.example.garage2.entite.Validation;
 import com.example.garage2.entite.Voitures;
+import com.example.garage2.exceptions.EmailAlreadyExistsException;
 import com.example.garage2.repository.UtilisateurRepository;
 import com.example.garage2.repository.VoitureRepository;
 import com.example.garage2.securite.PasswordValidator;
@@ -20,10 +21,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @AllArgsConstructor
 @Service
@@ -36,8 +36,10 @@ public class UtilisateurService implements UserDetailsService {
     private VoitureRepository voitureRepository;
 
     public void inscription(Utilisateur utilisateur) {
-
         PasswordValidator passwordValidator = new PasswordValidator();
+        String email = utilisateur.getEmail();
+
+
         if (!passwordValidator.isPasswordValid(utilisateur.getPassword())) {
             throw new RuntimeException("Le mot de passe ne répond pas aux critères de complexité.");
         }
@@ -52,6 +54,9 @@ public class UtilisateurService implements UserDetailsService {
         Optional<Utilisateur> utilisateurOptional = this.utilisateurRepository.findByEmail(utilisateur.getEmail());
         if(utilisateurOptional.isPresent()) {
             throw  new RuntimeException("Votre mail est déjà utilisé");
+        }
+        if (utilisateurRepository.existsByEmail(email)) {
+            throw new EmailAlreadyExistsException(email);
         }
         String mdpCrypte = this.passwordEncoder.encode(utilisateur.getPassword());
         utilisateur.setPassword(mdpCrypte);
@@ -104,6 +109,7 @@ public class UtilisateurService implements UserDetailsService {
         return utilisateurRepository.save(utilisateurExistant);
     }
 
+<<<<<<< HEAD
     public void ajouterVoiture(int idUtilisateur, Voitures voitures) {
         Utilisateur utilisateur = utilisateurRepository.findById(idUtilisateur)
                 .orElseThrow(() -> new RuntimeException("Utilisateur introuvable avec l'ID : " + idUtilisateur));
@@ -115,5 +121,20 @@ public class UtilisateurService implements UserDetailsService {
         voitureRepository.save(voitures);
     }
 
+=======
+    public void modifierMdp(Map<String, String> parametres) {
+        Utilisateur utilisateur = this.loadUserByUsername(parametres.get("email"));
+        this.validationService.enregistrer(utilisateur);
+    }
+
+    public void nouveauMdp(Map<String, String> parametres) {
+        Utilisateur utilisateur = this.loadUserByUsername(parametres.get("email"));
+       final Validation validation = validationService.lireEnFonctionDuCode(parametres.get("code"));
+       if(validation.getUtilisateur().getEmail().equals(utilisateur.getEmail())){
+        String mdpCrypte = this.passwordEncoder.encode(parametres.get("password"));
+        utilisateur.setPassword(mdpCrypte);}
+       this.utilisateurRepository.save(utilisateur);
+    }
+>>>>>>> dev
 }
 

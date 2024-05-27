@@ -10,8 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @CrossOrigin
 @RestController
+@RequestMapping("locationbox")
 public class LocationController {
 
     @Autowired
@@ -21,8 +24,14 @@ public class LocationController {
     @Autowired
     private EmailService emailService;
 
+<<<<<<< HEAD
     @PostMapping("locationbox")
+=======
+
+    @PostMapping
+>>>>>>> dev
     public ResponseEntity<String> creerLocationbox(@RequestBody LocationBox locationBox) {
+
         try {
             // Extraire l'utilisateur actuellement authentifié
             Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -32,11 +41,16 @@ public class LocationController {
                 if (locationBox.getBoxId()==null) {
                     return ResponseEntity.badRequest().body("L'ID de la boîte est requis.");}
                 boxService.saveLocation(locationBox,utilisateur.getId());
+//Recuperer les location informations
+                LocalDateTime startDate= locationBox.getStartDate();
+                LocalDateTime returnDate = locationBox.getReturnDate();
+                float prix_loc = locationBox.getPrixLoc();
+
+
 
                 // Send confirmation email
                 String subject = "Confirmation de création de location";
-                String message = "Votre location de boîte a été créée avec succès.";
-                emailService.sendConfirmationEmail(userEmail, subject, message);
+                emailService.sendLocationNotificationEmail(userEmail, subject, startDate,returnDate,prix_loc);
 
                 // Envoyer la notification 24 heures avant le début de la location
                 locationBoxNotificationService.sendNotification();
@@ -52,5 +66,15 @@ public class LocationController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<LocationBox> modifierInformationsLocation(@PathVariable Long id, @RequestBody LocationBox locationModifiee) {
+        Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LocationBox locationMissAJour = boxService.updateLocation((long) utilisateur.getId(), id, locationModifiee);
 
+        if (locationMissAJour != null) {
+            return ResponseEntity.ok(locationMissAJour);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

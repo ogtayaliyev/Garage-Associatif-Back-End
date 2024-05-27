@@ -1,5 +1,6 @@
 package com.example.garage2.entite;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class Reparation {
     private Long id;
     private String plaqueImmatriculation;
     private Long duree;
+    private String etatReparation;
 
         @ManyToOne
     private ReparationType reparationType;
@@ -30,6 +32,7 @@ public class Reparation {
     @JoinColumn(name = "voiture_id")
     private Voitures voiture;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;

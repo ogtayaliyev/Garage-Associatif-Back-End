@@ -2,12 +2,14 @@ package com.example.garage2.service;
 import com.example.garage2.entite.*;
 import com.example.garage2.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -100,5 +102,40 @@ public class BoxService {
         }
     }
 
+    public LocationBox updateLocation(Long userId, Long locationBoxId, LocationBox locationModifiee) {
+        // List des Voitures utilisateur connecté
+        List<LocationBox> locationlist = locationBoxRepository.findByUtilisateurId(userId);
+
+        // Trouver voiture utilisateure dans les voitures existent
+        LocationBox locationExistante = null;
+        for (LocationBox locationbox : locationlist) {
+            if (locationbox.getId().equals(locationBoxId)) {
+                locationExistante = locationbox;
+                break;
+            }
+        }
+
+        if (locationExistante == null) {
+            return null; //
+        }
+
+        if (locationModifiee.getEtatLocation() != null) {
+            locationExistante.setEtatLocation(locationModifiee.getEtatLocation());
+        }
+        return locationBoxRepository.save(locationExistante);
+    }
+    @Scheduled(fixedRate = 60000) // S'exécute toutes les minutes
+    public void updateLocationBoxStatus() {
+        List<LocationBox> boxs = locationBoxRepository.findByReturnDateBeforeAndEtatLocationNot(LocalDateTime.now(), "passé");
+        for (LocationBox box : boxs) {
+            box.setEtatLocation("passé");
+            locationBoxRepository.save(box);
+        }
+        List<LocationBox> boxsActives = locationBoxRepository.findByReturnDateAfterAndEtatLocationNot(LocalDateTime.now(), "actif");
+        for (LocationBox box : boxsActives) {
+            box.setEtatLocation("actif");
+            locationBoxRepository.save(box);
+        }
+    }
 
 }

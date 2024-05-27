@@ -24,5 +24,6 @@ public class Box {
     private String superficie;
     private float prix_loc;
 
+
 }
 

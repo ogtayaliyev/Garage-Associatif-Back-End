@@ -6,7 +6,9 @@ import com.example.garage2.entite.Utilisateur;
 import com.example.garage2.repository.ReparationRepository;
 import com.example.garage2.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,9 +18,10 @@ import java.util.Optional;
 @Service
 public class ReparationService {
 
-    @Autowired
+//   @Autowired
     private final ReparationRepository reparationRepository;
-    @Autowired
+
+//    @Autowired
     private final UtilisateurRepository utilisateurRepository;
 
     public ReparationService(ReparationRepository reparationRepository, UtilisateurRepository utilisateurRepository) {
@@ -62,5 +65,51 @@ public class ReparationService {
         // Enregistrer la nouvelle réservation
         reparationRepository.save(reparation);
     }
+
+    public void deleteReparation(Long id) {
+        reparationRepository.deleteById(id);
+    }
+
+    public Reparation updateReparation(Long userId, Long reparationId, Reparation reparationModifiee) {
+        // List des Voitures utilisateur connecté
+        List<Reparation> reparationlist = reparationRepository.findByUtilisateurId(userId);
+
+        // Trouver entretiens reparation d' utilisateure dans les reparations existent
+        Reparation reparationExistante = null;
+        for (Reparation reparation : reparationlist) {
+            if (reparation.getId().equals(reparationId)) {
+                reparationExistante = reparation;
+                break;
+            }
+        }
+
+        if (reparationExistante == null) {
+            return null; //
+        }
+
+        if (reparationModifiee.getEtatReparation() != null) {
+            reparationExistante.setEtatReparation(reparationModifiee.getEtatReparation());
+        }
+        return reparationRepository.save(reparationExistante);
+    }
+
+    public List<Reparation> getAllReparations() {
+        return reparationRepository.findAll();
+    }
+
+    @Scheduled(fixedRate = 60000) // S'exécute toutes les minutes
+    public void updateReparationStatus() {
+        List<Reparation> reparations = reparationRepository.findByEndDateBeforeAndEtatReparationNot(LocalDateTime.now(), "passé");
+        for (Reparation entretien : reparations) {
+            entretien.setEtatReparation("passé");
+            reparationRepository.save(entretien);
+        }
+        List<Reparation> reparationsActives = reparationRepository.findByEndDateAfterAndEtatReparationNot(LocalDateTime.now(), "actif");
+        for (Reparation reparation : reparationsActives) {
+            reparation.setEtatReparation("actif");
+            reparationRepository.save(reparation);
+        }
+    }
+
 }
 

@@ -1,5 +1,6 @@
 package com.example.garage2.entite;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,14 +25,22 @@ public class LocationBox {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime returnDate;
     private float prix_loc;
+    private String etatLocation;
 
+
+    public float getPrixLoc() {
+        return prix_loc;
+    }
     @ManyToOne
     @JoinColumn(name = "box_id", nullable = false)
     private Box box;
 
+    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "utilisateur_id", nullable = false)
+    @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;
+
+
     public Long getBoxId() {
         if (box != null) {
             return box.getId();

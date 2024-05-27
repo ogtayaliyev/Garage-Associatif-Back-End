@@ -1,5 +1,6 @@
 package com.example.garage2.entite;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,4 +24,8 @@ public class Voiture_model {
     private String moteure_type;
     private int moteure_puissance;
 
+
+    @ManyToOne
+    @JoinColumn(name = "marque_id", nullable = false)
+    private Voiture_Marque marque;
 }
