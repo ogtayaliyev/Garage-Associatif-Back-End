@@ -5,8 +5,21 @@ on:
     branches: ["master"]
   release:
     types: [created]
-
+  workflow-dispatch:
 jobs:
+
+  create-folder:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create folder on remote VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: whoami
   build:
 
     runs-on: ubuntu-latest
