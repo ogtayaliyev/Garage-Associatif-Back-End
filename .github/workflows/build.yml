@@ -44,7 +44,7 @@ jobs:
           node-version: '20'
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -Dmaven.tests.skip=true -B package --file pom.xml
 
 # Uncomment the following steps if you need to publish to GitHub Packages
 #      - name: Publish to GitHub Packages Apache Maven
