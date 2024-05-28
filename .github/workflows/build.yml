@@ -13,10 +13,10 @@ jobs:
       - name: Create folder on remote VM
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
+          host: 172.16.1.242
+          username: root
           key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
+          port: 22
           script: |
             mkdir -p /path/to/your/folder
             ls -al /path/to/your/folder
