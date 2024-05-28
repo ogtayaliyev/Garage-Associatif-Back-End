@@ -18,8 +18,8 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            mkdir -p /path/to/your/folder
-            ls -al /path/to/your/folder
+            mkdir -p /opt/applications/sa
+            
 
   build:
     runs-on: ubuntu-latest
@@ -45,3 +45,28 @@ jobs:
 
       - name: Build with Maven
         run: mvn -Dmaven.test.skip=true -B package --file pom.xml
+      - name: copy file via ssh key
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.KEY }}
+          source: "target/SNAPSHOT.jar"
+          target: /opt/applications/sa
+          strip_components: 1
+  run-jar:
+    name: Run jar on Server
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Create folder on remote VM
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            ln -sf /opt/application/sa/SNAPSHOT.jar /etc/init.d/sa
+            /etc/init.d/sa start
