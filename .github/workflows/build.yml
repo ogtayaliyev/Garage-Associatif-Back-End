@@ -8,7 +8,7 @@ on:
 jobs:
   create-folder:
     name: Create folder on remote VM
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Create folder on remote VM
         uses: appleboy/ssh-action@v1.0.0
