@@ -19,7 +19,6 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             mkdir -p /opt/applications/sa
-            
 
   build:
     runs-on: ubuntu-latest
@@ -45,7 +44,8 @@ jobs:
 
       - name: Build with Maven
         run: mvn -Dmaven.test.skip=true -B package --file pom.xml
-      - name: copy file via ssh key
+
+      - name: Copy file via SSH key
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
@@ -54,12 +54,12 @@ jobs:
           key: ${{ secrets.KEY }}
           source: "target/Garage2-0.0.1-SNAPSHOT.jar"
           target: /opt/applications/sa
-          strip_components: 1
+
   run-jar:
-    name: Run sur server distant
+    name: Run on remote server
     runs-on: ubuntu-latest
     steps:
-      - name: Create folder on remote VM
+      - name: Start application on remote VM
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.HOST }}
@@ -67,5 +67,5 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            ln -sf /opt/applications/Garage2-0.0.1-SNAPSHOT.jar /etc/init/sa
+            ln -sf /opt/applications/sa/Garage2-0.0.1-SNAPSHOT.jar /etc/init.d/sa
             /etc/init.d/sa start
