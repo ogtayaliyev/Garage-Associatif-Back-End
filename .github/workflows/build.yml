@@ -10,9 +10,6 @@ jobs:
     name: Create folder on remote VM
     runs-on: windows-latest
     steps:
-      - name: Generate SSH keys
-        run: ssh-keygen -t rsa -b 4096 -C "root"
-
       - name: Create folder on remote VM
         uses: appleboy/ssh-action@v1.0.0
         with:
