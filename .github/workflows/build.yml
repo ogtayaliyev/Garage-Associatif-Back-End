@@ -3,11 +3,11 @@ name: Construction d'un Projet
 on:
   push:
     branches: ["master"]
-
+  workflow-dispatch:
 jobs:
 
   create-folder:
-    name: Build
+    name: create-folder
     runs-on: ubuntu-latest
     steps:
       - name: Create folder on remote VM
@@ -15,7 +15,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: whoami
   build:
