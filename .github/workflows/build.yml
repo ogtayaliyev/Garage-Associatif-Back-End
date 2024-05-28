@@ -3,8 +3,6 @@ name: Construction d'un Projet
 on:
   push:
     branches: ["master"]
-  release:
-    types: [created]
 
 jobs:
 
