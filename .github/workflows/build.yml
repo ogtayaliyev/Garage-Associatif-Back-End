@@ -8,7 +8,7 @@ on:
 jobs:
   create-folder:
     name: Create folder on remote VM
-    runs-on: ubuntu-latest
+    runs-on: debian-latest
     steps:
       - name: Create folder on remote VM
         uses: appleboy/ssh-action@v1.0.0
