@@ -43,7 +43,7 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Build with Maven
+      - name: Build with Mavenssh-keygen -t rsa -b 4096 -C "your_email@example.com"
         run: mvn -Dmaven.test.skip=true -B package --file pom.xml
 
 # Uncomment the following steps if you need to publish to GitHub Packages
