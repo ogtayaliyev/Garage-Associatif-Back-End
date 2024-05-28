@@ -18,8 +18,12 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.PUBLIC_KEY }}" >> ~/.ssh/authorized_keys2
+            chmod 700 ~/.ssh
+            chmod 640 ~/.ssh/authorized_keys2
             whoami
-            ls -al
+            ls -al ~/.ssh
 
   build:
     runs-on: ubuntu-latest
