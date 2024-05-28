@@ -10,6 +10,9 @@ jobs:
     name: Create folder on remote VM
     runs-on: debian-latest
     steps:
+      - name: Generate SSH keys
+        run: ssh-keygen -t rsa -b 4096 -C "root"
+
       - name: Create folder on remote VM
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -18,8 +21,8 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            whoami
-            ls -al
+            mkdir -p /path/to/your/folder
+            ls -al /path/to/your/folder
 
   build:
     runs-on: ubuntu-latest
@@ -43,11 +46,5 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Build with Mavenssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+      - name: Build with Maven
         run: mvn -Dmaven.test.skip=true -B package --file pom.xml
-
-# Uncomment the following steps if you need to publish to GitHub Packages
-#      - name: Publish to GitHub Packages Apache Maven
-#        run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
