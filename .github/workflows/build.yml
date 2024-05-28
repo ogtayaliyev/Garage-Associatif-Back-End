@@ -8,7 +8,7 @@ on:
 jobs:
   create-folder:
     name: Create folder on remote VM
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Generate SSH keys
         run: ssh-keygen -t rsa -b 4096 -C "root"
